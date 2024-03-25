@@ -36,8 +36,8 @@ entity top is
         clk_i: in STD_LOGIC;
         btn_i: in STD_LOGIC_VECTOR (3 downto 0); -- 3-BTNL, 2-BTNC, 1-BTNR, 0-BTND
         sw_i: in STD_LOGIC_VECTOR (7 downto 0);
-        led7_an_o: out STD_LOGIC_VECTOR (3 downto 0);
-        led7_seg_o: out STD_LOGIC_VECTOR (7 downto 0)
+        led7_an_o: out STD_LOGIC_VECTOR (3 downto 0) := (others => '1');
+        led7_seg_o: out STD_LOGIC_VECTOR (7 downto 0) := (others => '1') 
     );
 end top;
 
@@ -60,23 +60,22 @@ component encoder
     );
 end component encoder;
 
-signal rst_i: STD_LOGIC := '0';
-signal digit_i: STD_LOGIC_VECTOR(31 downto 0);
+    signal digit: STD_LOGIC_VECTOR(31 downto 0) := (others => '1');
 begin
 
-    disp: display port map(
-        clk_i => clk_i,
-        rst_i => rst_i,
-        digit_i => digit_i,
-        led7_an_o => led7_an_o,
-        led7_seg_o => led7_seg_o
-    );
-   
     enc: encoder port map(
         clk_i => clk_i,
         btn_i => btn_i,
         sw_i => sw_i,
-        digit_o => digit_i
+        digit_o => digit
+    );
+
+    disp: display port map(
+        clk_i => clk_i,
+        rst_i => '0',
+        digit_i => digit,
+        led7_an_o => led7_an_o,
+        led7_seg_o => led7_seg_o
     );
 
 end Behavioral;

@@ -38,7 +38,7 @@ entity display is
             rst_i: in STD_LOGIC;
             digit_i: in STD_LOGIC_VECTOR (31 downto 0);
             led7_an_o: out STD_LOGIC_VECTOR (3 downto 0);
-            led7_seg_o: out STD_LOGIC_VECTOR (7 downto 0)
+            led7_seg_o: out STD_LOGIC_VECTOR (7 downto 0) := (others => '1')
         );
 end display;
 
@@ -66,14 +66,21 @@ begin
         "1111" when others; 
 
     multiplexer: process(clk_i, rst_i)
+        constant N: integer := 2; -- 100000; -- for a 100 MHz clock
+        variable counter: integer := 0;
     begin
         if rst_i = '1' then 
             an <= "000";
         elsif rising_edge(clk_i) then
-            if(an >= "011") then
-                an <= "000";
+            if(counter < N) then
+                counter := counter+1;
             else
-                an <= an+1;
+                counter := 0;
+                if(an >= "011") then
+                    an <= "000";
+                else
+                    an <= an+1;
+                end if;
             end if;    
         end if;
     end process multiplexer;

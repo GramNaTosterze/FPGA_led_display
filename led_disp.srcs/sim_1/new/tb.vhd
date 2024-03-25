@@ -49,8 +49,6 @@ end component top;
 
 -- signals
     signal clk_i: STD_LOGIC := '0';
-    signal rst_i: STD_LOGIC := '0';
-    signal digit_i: STD_LOGIC_VECTOR(7 downto 0) := (others => '1');
     signal btn_i: STD_LOGIC_VECTOR(3 downto 0) := "0000";
     signal sw_i: STD_LOGIC_VECTOR(7 downto 0) := (others => '1');
     signal led7_an_o: STD_LOGIC_VECTOR(3 downto 0) := (others => '1');

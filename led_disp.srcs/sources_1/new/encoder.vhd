@@ -36,7 +36,7 @@ entity encoder is
         clk_i: in STD_LOGIC;
         btn_i: in STD_LOGIC_VECTOR (3 downto 0); -- 3-BTNL, 2-BTNC, 1-BTNR, 0-BTND
         sw_i: in STD_LOGIC_VECTOR (7 downto 0);
-        digit_o: out STD_LOGIC_VECTOR (31 downto 0)
+        digit_o: out STD_LOGIC_VECTOR (31 downto 0) := (others => '1')
     );
 end encoder;
 
@@ -44,25 +44,25 @@ architecture Behavioral of encoder is
     signal num: STD_LOGIC_VECTOR(6 downto 0) := (others => '0');
 begin
     with sw_i(3 downto 0) select
-    num <= "0000000" when "0000",
-        "0000000" when "0001",
-        "0000000" when "0010",
-        "0000000" when "0011",
-        "0000000" when "0100",
-        "0000000" when "0101",
-        "0000000" when "0110",
-        "0000000" when "0111",
-        "0000000" when "1000",
-        "0000000" when "1001",
-        "0000000" when "1010",
-        "0000000" when "1011",
-        "0000000" when "1100",
-        "0000000" when "1101",
-        "0000000" when "1110",
-        "0000000" when "1111",
+    num <= "0000001" when "0000", -- 0
+        "1001111" when "0001",    -- 1
+        "0010010" when "0010",    -- 2
+        "0000110" when "0011",    -- 3
+        "1001100" when "0100",    -- 4
+        "0100100" when "0101",    -- 5
+        "0100000" when "0110",    -- 6
+        "0001111" when "0111",    -- 7
+        "0000000" when "1000",    -- 8
+        "0000100" when "1001",    -- 9
+        "0001000" when "1010",    -- A
+        "1100000" when "1011",    -- b
+        "0110001" when "1100",    -- C
+        "1000010" when "1101",    -- d
+        "0110000" when "1110",    -- E
+        "0111000" when "1111",    -- F
         "1111111" when others;
 
-    digits: process(clk_i, btn_i, sw_i)
+    digits: process(clk_i, btn_i, sw_i(7 downto 4))
     begin
         
         if rising_edge(clk_i) then
