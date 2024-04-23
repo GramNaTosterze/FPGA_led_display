@@ -34,14 +34,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity encoder is
     Port(
         clk_i: in STD_LOGIC;
-        btn_i: in STD_LOGIC_VECTOR (3 downto 0); -- 3-BTNL, 2-BTNC, 1-BTNR, 0-BTND
+        btn_i: in STD_LOGIC_VECTOR (3 downto 0) := "0000"; -- 3-BTNL, 2-BTNC, 1-BTNR, 0-BTND
         sw_i: in STD_LOGIC_VECTOR (7 downto 0);
         digit_o: out STD_LOGIC_VECTOR (31 downto 0) := (others => '1')
     );
 end encoder;
 
+
 architecture Behavioral of encoder is
-    signal num: STD_LOGIC_VECTOR(6 downto 0) := (others => '0');
+    signal num: STD_LOGIC_VECTOR(6 downto 0) := (others => '1');
 begin
     with sw_i(3 downto 0) select
     num <= "0000001" when "0000", -- 0
@@ -63,28 +64,29 @@ begin
         "1111111" when others;
 
     digits: process(clk_i, btn_i, sw_i(7 downto 4))
+        variable digit: STD_LOGIC_VECTOR (31 downto 0) := (others => '1');
     begin
         
         if rising_edge(clk_i) then
         
             if btn_i(0) = '1' then
-                digit_o(7 downto 1) <= num;
+                digit(7 downto 1) := num(6 downto 0);
             end if;
-        
+            
             if btn_i(1) = '1' then
-                digit_o(15 downto 9) <= num;
+                digit(15 downto 9) := num(6 downto 0);
             end if;
             
             if btn_i(2) = '1' then
-                digit_o(23 downto 17) <= num;
+                digit(23 downto 17) := num(6 downto 0);
             end if;
             
             if btn_i(3) = '1' then
-                digit_o(31 downto 25) <= num;
+                digit(31 downto 25) := num(6 downto 0);
             end if;
         
         end if;
-    
+        digit_o <= digit;
         -- set dots on display
         digit_o(0) <= not sw_i(4);
         digit_o(8) <= not sw_i(5);

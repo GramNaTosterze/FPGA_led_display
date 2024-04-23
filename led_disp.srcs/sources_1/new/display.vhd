@@ -66,7 +66,7 @@ begin
         "1111" when others; 
 
     multiplexer: process(clk_i, rst_i)
-        constant N: integer := 2; -- 100000; -- for a 100 MHz clock
+        constant N: integer := 100000; -- for a 100 MHz clock
         variable counter: integer := 0;
     begin
         if rst_i = '1' then 
@@ -76,7 +76,7 @@ begin
                 counter := counter+1;
             else
                 counter := 0;
-                if(an >= "011") then
+                if(an > "011") then
                     an <= "000";
                 else
                     an <= an+1;
